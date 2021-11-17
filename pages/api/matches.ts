@@ -18,21 +18,25 @@ const getDataFromMatch: ReducerGetDataMatch = (newObj, [key, val]) => {
 
 export default async function getTournaments(req: NextApiRequest,
     res: NextApiResponse<ApiDataReturn[]>) {
-    const responseTournament = await axios.get<TournamentData>("https://cp.fn.sportradar.com/common/en/Etc:UTC/gismo/config_tournaments/1/17")
-    const tournamets = responseTournament.data
-    const tournamentList = tournamets.doc[0].data.tournaments
+        try {
+            const responseTournament = await axios.get<TournamentData>("https://cp.fn.sportradar.com/common/en/Etc:UTC/gismo/config_tournaments/1/17")
+            const tournamets = responseTournament.data
+            const tournamentList = tournamets.doc[0].data.tournaments
 
-    const tournamentsResponse = await Promise.all(
-        tournamentList.map(async (tournament) => {
-          const matches = await getData(tournament._id);
-          const matchesData = matches.data.doc[0].data.matches;
-          const matchesEntries = Object.entries(matchesData)
-          const newMatchesData = matchesEntries.slice(-5).reduce(getDataFromMatch, {})
-          return {...tournament, matches: newMatchesData}
-        })
-    )
+            const tournamentsResponse = await Promise.all(
+                tournamentList.map(async (tournament) => {
+                const matches = await getData(tournament._id);
+                const matchesData = matches.data.doc[0].data.matches;
+                const matchesEntries = Object.entries(matchesData)
+                const newMatchesData = matchesEntries.slice(-5).reduce(getDataFromMatch, {})
+                return {...tournament, matches: newMatchesData}
+                })
+            )
 
-    res.status(200).json(tournamentsResponse)
+            res.status(200).json(tournamentsResponse)
+        } catch(err) {
+            res.status(400).json([])
+        }
 }
 
 
