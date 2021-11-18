@@ -99,8 +99,7 @@ export type GetDataReduceValue = [keyof OnlyMatchDataUsed, OnlyMatchDataUsed[key
 export type ReducerGetDataMatch = (acc: {[key: string]: MatchDataNeeded}, val: GetDataReduceValue ) => {[key: string]: MatchDataNeeded}
 
 
-export interface ApiDataReturn extends TournamentDataNeeded {
-    result(result: any);
+export interface ApiDataReturn extends TournamentDataNeeded {  
     matches: {
         [key: string]: MatchDataNeeded;
     }
