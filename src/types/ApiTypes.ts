@@ -100,6 +100,7 @@ export type ReducerGetDataMatch = (acc: {[key: string]: MatchDataNeeded}, val: G
 
 
 export interface ApiDataReturn extends TournamentDataNeeded {
+    result(result: any);
     matches: {
         [key: string]: MatchDataNeeded;
     }
